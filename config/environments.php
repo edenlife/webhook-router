@@ -12,6 +12,7 @@ return [
     */
 
     'defaults' => [
-        'https://api-onetime-orders.edenlife.ng'
+        'https://api-onetime-orders.edenlife.ng/api/v2/track/paystack/payment',
+        'https://api-staging-testanything.edenlife.ng/api/v2/track/paystack/payment'
     ]
 ];
