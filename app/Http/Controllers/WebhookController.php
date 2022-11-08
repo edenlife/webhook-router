@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\WebhookEngine;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class WebhookController extends Controller
 {
@@ -15,11 +16,9 @@ class WebhookController extends Controller
      * @return array
      */
     public function distribute(Request $request) {
-        $environments = config('environments.defaults');
+        Log::info("New request received", $request);
 
-        foreach($environments as $environment) {
-            WebhookEngine::dispatch($environment, $request);
-        }
+        WebhookEngine::dispatch($request);
 
         return response()->json([
             "message" => "Webhook received"

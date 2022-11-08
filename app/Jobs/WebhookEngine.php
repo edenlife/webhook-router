@@ -15,7 +15,6 @@ class WebhookEngine implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $environment;
     private $requestBody;
 
     /**
@@ -25,9 +24,8 @@ class WebhookEngine implements ShouldQueue
      * @param object $requestBody
      * @return void
      */
-    public function __construct($environment, $request)
+    public function __construct($request)
     {
-        $this->environment = $environment;
         $this->requestBody = json_decode($request->getContent(),true);
     }
 
@@ -38,8 +36,19 @@ class WebhookEngine implements ShouldQueue
      */
     public function handle()
     {
-        Http::post($this->environment, $this->requestBody);
+        $webhookMetaData = $this->requestBody['data']['metadata']['custom_fields'][0];
 
-        Log::info("Called ". $this->environment. " with body ", $this->requestBody);
+        $url = $webhookMetaData['host_url'] ?? null;
+
+        if (!$url) {
+            Log::info("Cannot find url for data", $webhookMetaData);
+            return;
+        }
+
+        $fullUrl = $url . config('environments.paystack_endpoint');
+
+        Http::post($fullUrl, $this->requestBody);
+
+        Log::info("Called ". $fullUrl. " with body ", $this->requestBody);
     }
 }
