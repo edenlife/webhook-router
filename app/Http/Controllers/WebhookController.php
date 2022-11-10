@@ -16,7 +16,7 @@ class WebhookController extends Controller
      * @return array
      */
     public function distribute(Request $request) {
-        Log::info("New request received", $request);
+        Log::info("New request received", [$request]);
 
         WebhookEngine::dispatch($request);
 
