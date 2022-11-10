@@ -41,7 +41,7 @@ class WebhookEngine implements ShouldQueue
         $url = $webhookMetaData['host_url'] ?? null;
 
         if (!$url) {
-            Log::info("Cannot find url for data", [$webhookMetaData]);
+            Log::info("Cannot find url for data");
             return;
         }
 
@@ -49,6 +49,6 @@ class WebhookEngine implements ShouldQueue
 
         Http::post($fullUrl, $this->requestBody);
 
-        Log::info("Called ". $fullUrl. " with body ", [$this->requestBody]);
+        Log::info("Called ". $fullUrl. " with body ");
     }
 }
